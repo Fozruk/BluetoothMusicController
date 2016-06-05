@@ -22,9 +22,10 @@ Dbus needs the mac address of the phone, store it here:
 def getCurrentPlayer(dbusSession):
 	mac_address = open(expanduser("~")+"/.config/.bluetoothplayer.conf").read().replace(":","_").replace("\n","")
 	#lprint mac_address
-	players = ['player1','player2'] #player1= iOS Player, player2 = Spotify or 3rd party player
-	for player in players:
-		current_player = dbusSession.get_object("org.bluez","/org/bluez/hci0/dev_{}/{}".format(mac_address,player)) 
+	#players = ['player1','player2'] #player1= iOS Player, player2 = Spotify or 3rd party player
+	for player in range(99):
+		current_player = dbusSession.get_object("org.bluez","/org/bluez/hci0/dev_{}/player{}".format(mac_address,player)) 
+		print "Check Player {}".format(player)	
 		playercontrol = getPlayer(current_player)
 		if checkPlayerAvail(current_player):
 			print "Found Player - {}".format(getTrackInfo(current_player))
