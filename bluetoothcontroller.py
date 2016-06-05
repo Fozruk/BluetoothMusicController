@@ -75,10 +75,11 @@ def sendcommand(player_proxy,command):
 		playercontrol.Next()
 	elif command == 'previous':
 		playercontrol.Previous()
-	else:
-		print "wtf"
-
+	time.sleep(2)
+	str = getTrackInfo(player_proxy)
+	print str['Title'],"-",str['Artist'],"-",str['Album'] 
 def main():
 	initdbus()
 
 if __name__ == "__main__": main()
+
