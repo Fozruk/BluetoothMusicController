@@ -9,8 +9,6 @@ requires a X11 desktop for some reason
 """
 def initdbus():
 	dbusSession = dbus.SystemBus()
-	#bluezManager = busSession.get_object("org.bluez","/org/bluez/hci0/dev_CC_29_F5_A5_C9_4A/player1")
-	#playerevent = dbus.Interface(meem,'org.bluez.MediaPlayer1')
 	player = getCurrentPlayer(dbusSession)
 	print sys.argv
 	command = sys.argv[1]
