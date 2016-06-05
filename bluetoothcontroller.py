@@ -3,6 +3,10 @@ import dbus
 import sys
 from os.path import expanduser
 
+"""
+Initializes the dbus session. This needs to be the systembus because the session bus
+requires a X11 desktop for some reason
+"""
 def initdbus():
 	dbusSession = dbus.SystemBus()
 	player = getCurrentPlayer(dbusSession)
@@ -10,6 +14,11 @@ def initdbus():
 	command = sys.argv[1]
 	sendcommand(player,command)
 
+"""
+Gets the current player which currently plays music on the device
+Dbus needs the mac address of the phone, store it here:
+~/.config/.bluetoothplayer.conf
+"""
 def getCurrentPlayer(dbusSession):
 	mac_address = open(expanduser("~")+"/.config/.bluetoothplayer.conf").read().replace(":","_").replace("\n","")
 	#lprint mac_address
@@ -24,6 +33,9 @@ def getCurrentPlayer(dbusSession):
 def getPlayer(player_proxy):
 	return dbus.Interface(player_proxy,'org.bluez.MediaPlayer1')
 
+"""
+Gets the infos for the current track
+"""
 def getTrackInfo(player_proxy):
 	prop_mang = dbus.Interface(player_proxy,'org.freedesktop.DBus.Properties')
 	return prop_mang.Get('org.bluez.MediaPlayer1','Track')
@@ -32,6 +44,12 @@ def getPlayerState(player_proxy):
 	prop_mang = dbus.Interface(player_proxy,'org.freedesktop.DBus.Properties')
 	return prop_mang.Get('org.bluez.MediaPlayer1','Status')
 
+"""
+Checks if the passed player currently played music. On iOS every player seems to have
+a different dbus address (f.e. stock ios player has "player1" and spotify has "player2")
+This method tries to get a track info from the passed player. If the player is not currently
+used dbus will throw an exception.
+"""
 def checkPlayerAvail(player_proxy):
 	try:
 		prop_mang = dbus.Interface(player_proxy,'org.freedesktop.DBus.Properties')
@@ -41,6 +59,10 @@ def checkPlayerAvail(player_proxy):
 		return False
 	return True
 
+
+"""
+Executes passed args
+"""
 def sendcommand(player_proxy,command):
 	playstring = getPlayerState(player_proxy)
 	playercontrol = getPlayer(player_proxy)
