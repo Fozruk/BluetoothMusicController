@@ -76,6 +76,10 @@ def sendcommand(player_proxy,command):
 		playercontrol.Next()
 	elif command == 'previous':
 		playercontrol.Previous()
+	"""
+	we need to wait 2 seconds because it takes some time
+	to update the play state and track info information
+	"""
 	time.sleep(2)
 	str = getTrackInfo(player_proxy)
 	print str['Title'],"-",str['Artist'],"-",str['Album'] 
